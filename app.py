@@ -7,10 +7,11 @@ web前端工程师：Hanson.Liu 360468937@qq.com
 
 import urllib
 import urllib2
-import time
 import MySQLdb
 import re
-import sys
+import files
+import time
+import db
 
 #糗事百科爬虫类
 class QSBK:
@@ -40,7 +41,7 @@ class QSBK:
         pageCode = self.getPage(pageIndex)
         if not pageCode:
             print "页面加载失败...."
-            return None
+            return []
         pattern = re.compile('<div class="article .*?">.*?<div class="author .*?">.*?<h2>(.*?)</h2>.*?</div>.*?<div.*?'+
                          'content">(.*?)</div>(.*?)</div>',re.S)
         items = re.findall(pattern,pageCode)
@@ -52,20 +53,26 @@ class QSBK:
             haveImg = re.search("img",item[2])
             #如果不含有图片，把它加入list中
             if not haveImg:
-                pageStories.append([item[0].strip(),item[1].strip()])
+                pageStories.append({"title":item[0].strip(),"content":item[1].strip()})
         return pageStories
 
-    def start(self):
-        reload(sys)                         # sys 主要用于解决保存txt 时出现的编码问题
-        sys.setdefaultencoding('utf-8')     # 3
-        content = self.getPageItems(1)
-        t = time.strftime("%Y-%m-%d", time.localtime())
-        fo = open("pub/"+ t +".txt","w+")
-        for item in content:
-            fo.write('anthor:'+item[0]+" content"+item[1]+"\r\n");
-        fo.close()
-        print '已保存txt'
+    def start(self,page):
+        d = db.MySQL()
+        for i in range(0,page):
+            print '开始获取第'+ str(i+1) +'页数据'
+            content = self.getPageItems(str(i))
+            print '共获取到' +str(len(content))+ '数据';
+
+            ##插入至数据库
+            for item in content:
+                d.insert('article',item)
+            d.commit()
+            print '插入到数据库成功'
+
+            #延迟一秒加载下一页内容
+            print '----------------------sleep3秒------------------------'
+            time.sleep(3)
 
 
 spider = QSBK()
-spider.start()
+spider.start(10)

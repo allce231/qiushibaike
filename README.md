@@ -1,15 +1,17 @@
 ## 糗事百科爬虫
 
 <pre>
+
     本人是一个web前端开发工程师，python是凭着学习的态度来玩的哈，写的不好请见谅
     
     有问题请联系 {name : 'Hanson', email : '360468937@qq.com'}
+    
 </pre>
 
-####主要代码 app.py  看注释
-####db.py python mysql一个简单的封装类
+###主要代码 app.py  看注释
+###db.py python mysql一个简单的封装类
 
-#####mysql 数据表
+###mysql 数据表
 <pre>
 CREATE TABLE `article` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,

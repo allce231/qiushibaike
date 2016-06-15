@@ -17,7 +17,7 @@ class MySQL:
 
     def query(self,sql):
         try:
-            n=self.cur.execute(sql)
+            n = self.cur.execute(sql)
             return n
         except MySQLdb.Error as e:
             print("Mysql Error:%s\nSQL:%s" %(e,sql))
@@ -34,7 +34,7 @@ class MySQL:
             _d = {}
             for i in range(0,len(inv)):
                 _d[desc[i][0]] = str(inv[i])
-                d.append(_d)
+            d.append(_d)
         return d
 
     def insert(self,table_name,data):
